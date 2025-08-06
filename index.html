@@ -1,723 +1,120 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Профсоюз ВКО</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* Анимированный фон */
-        .bg-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .floating-shape {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .floating-shape:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            top: 20%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .floating-shape:nth-child(2) {
-            width: 60px;
-            height: 60px;
-            top: 60%;
-            right: 10%;
-            animation-delay: 2s;
-        }
-
-        .floating-shape:nth-child(3) {
-            width: 40px;
-            height: 40px;
-            top: 80%;
-            left: 20%;
-            animation-delay: 4s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-        }
-
-        /* Glassmorphism контейнер */
-        .container {
-            max-width: 400px;
-            margin: 20px auto;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            animation: slideIn 0.6s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Заголовки */
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            color: white;
-        }
-
-        .logo {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .title {
-            font-size: 1.5em;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .subtitle {
-            font-size: 1em;
-            opacity: 0.9;
-        }
-
-        /* Кнопки выбора языка */
-        .language-selector {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            justify-content: center;
-        }
-
-        .lang-btn {
-            padding: 15px 25px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 1.1em;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        .lang-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .lang-btn.active {
-            background: rgba(255, 255, 255, 0.4);
-            transform: translateY(-2px);
-        }
-
-        /* Главное меню */
-        .main-menu {
-            display: none;
-        }
-
-        .main-menu.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .menu-button {
-            width: 100%;
-            padding: 18px 20px;
-            margin-bottom: 15px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            border-radius: 15px;
-            font-size: 1.1em;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .menu-button:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .menu-button:active {
-            transform: translateY(-1px);
-        }
-
-        /* Формы */
-        .form-container {
-            display: none;
-        }
-
-        .form-container.active {
-            display: block;
-            animation: slideIn 0.5s ease;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            color: white;
-            font-weight: 500;
-            margin-bottom: 8px;
-            font-size: 1.1em;
-        }
-
-        .form-input, .form-textarea {
-            width: 100%;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
-            color: white;
-            font-size: 1em;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .form-input::placeholder, .form-textarea::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .form-input:focus, .form-textarea:focus {
-            outline: none;
-            border-color: rgba(255, 255, 255, 0.6);
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-        }
-
-        .form-textarea {
-            height: 120px;
-            resize: vertical;
-        }
-
-        /* Кнопки действий */
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-        }
-
-        .btn-primary {
-            flex: 1;
-            padding: 15px;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(79, 172, 254, 0.6);
-        }
-
-        .btn-secondary {
-            padding: 15px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-1px);
-        }
-
-        /* Выбор анонимности */
-        .anonymity-buttons {
-            display: flex;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .anonymity-btn {
-            flex: 1;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1em;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .anonymity-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .anonymity-btn.active {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
-        }
-
-        /* Ссылки */
-        .link-list {
-            margin-top: 20px;
-        }
-
-        .link-item {
-            display: block;
-            padding: 15px;
-            margin-bottom: 10px;
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .link-item:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Успешное сообщение */
-        .success-message {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            font-size: 1.2em;
-            font-weight: 600;
-            margin: 20px 0;
-            box-shadow: 0 4px 20px rgba(17, 153, 142, 0.3);
-            animation: successSlide 0.5s ease;
-        }
-
-        @keyframes successSlide {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        /* Адаптивность */
-        @media (max-width: 480px) {
-            .container {
-                margin: 10px;
-                padding: 15px;
-            }
-            
-            .logo {
-                font-size: 2em;
-            }
-            
-            .language-selector {
-                flex-direction: column;
-                gap: 10px;
-            }
-        }
-
-        /* Скрытые элементы */
-        .hidden {
-            display: none !important;
-        }
-
-        /* Загрузка */
-        .loading {
-            text-align: center;
-            color: white;
-            font-size: 1.1em;
-            padding: 20px;
-        }
-
-        .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 10px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-    </style>
-</head>
-<body>
-    <div class="bg-animation">
-        <div class="floating-shape"></div>
-        <div class="floating-shape"></div>
-        <div class="floating-shape"></div>
-    </div>
-
-    <div class="container">
-        <!-- Заголовок -->
-        <div class="header">
-            <div class="logo">🏛️</div>
-            <div class="title" id="app-title">Профсоюз ВКО</div>
-            <div class="subtitle" id="app-subtitle">Восточно-Казахстанская область</div>
-        </div>
-
-        <!-- Выбор языка -->
-        <div class="language-selector" id="language-selector">
-            <button class="lang-btn active" data-lang="ru">Русский</button>
-            <button class="lang-btn" data-lang="kk">Қазақ тілі</button>
-        </div>
-
-        <!-- Главное меню -->
-        <div class="main-menu" id="main-menu">
-            <button class="menu-button" id="about-btn">
-                <span>👤</span>
-                <span id="about-text">О профсоюзе</span>
-            </button>
-            <button class="menu-button" id="legal-acts-btn">
-                <span>📢</span>
-                <span id="legal-acts-text">Правовые акты</span>
-            </button>
-            <button class="menu-button" id="appeal-btn">
-                <span>📝</span>
-                <span id="appeal-text">Подать обращение</span>
-            </button>
-            <button class="menu-button" id="contact-btn">
-                <span>📞</span>
-                <span id="contact-text">Связаться с представителем</span>
-            </button>
-        </div>
-
-        <!-- Форма обращения -->
-        <div class="form-container" id="appeal-form">
-            <!-- Выбор анонимности -->
-            <div id="anonymity-step">
-                <h3 class="form-label" id="anonymity-question">Вы хотите остаться инкогнито?</h3>
-                <div class="anonymity-buttons">
-                    <button class="anonymity-btn" data-anonym="true" id="anonym-yes">Да</button>
-                    <button class="anonymity-btn" data-anonym="false" id="anonym-no">Нет</button>
-                </div>
-            </div>
-
-            <!-- Персональные данные -->
-            <div id="personal-data" class="hidden">
-                <div class="form-group">
-                    <label class="form-label" id="name-label">ФИО:</label>
-                    <input type="text" class="form-input" id="name-input" placeholder="Введите ваше ФИО">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" id="job-label">Должность / Место работы:</label>
-                    <input type="text" class="form-input" id="job-input" placeholder="Введите должность">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" id="phone-label">Телефон:</label>
-                    <input type="tel" class="form-input" id="phone-input" placeholder="+7 777 123 45 67">
-                </div>
-            </div>
-
-            <!-- Тема и детали -->
-            <div id="appeal-details" class="hidden">
-                <div class="form-group">
-                    <label class="form-label" id="topic-label">Тема обращения:</label>
-                    <input type="text" class="form-input" id="topic-input" placeholder="Укажите тему">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" id="details-label">Подробности:</label>
-                    <textarea class="form-textarea" id="details-input" placeholder="Опишите ситуацию подробно"></textarea>
-                </div>
-            </div>
-
-            <div class="action-buttons">
-                <button class="btn-secondary" id="back-btn">🏠 На главную</button>
-                <button class="btn-primary" id="continue-btn">Продолжить</button>
-            </div>
-        </div>
-
-        <!-- Информация о профсоюзе -->
-        <div class="form-container" id="about-section">
-            <h3 class="form-label" id="about-title">Узнайте больше о нашем профсоюзе:</h3>
-            <a href="https://www.instagram.com/vko_senim/" target="_blank" class="link-item">
-                👉 Открыть информацию
-            </a>
-            <div class="action-buttons">
-                <button class="btn-secondary" id="about-back-btn">🏠 На главную</button>
-            </div>
-        </div>
-
-        <!-- Правовые акты -->
-        <div class="form-container" id="legal-acts-section">
-            <h3 class="form-label" id="legal-acts-title">📢 Нормативно-правовые акты:</h3>
-            <div class="link-list" id="legal-links">
-                <!-- Ссылки будут добавлены динамически -->
-            </div>
-            <div class="action-buttons">
-                <button class="btn-secondary" id="legal-back-btn">🏠 На главную</button>
-            </div>
-        </div>
-
-        <!-- Контакты -->
-        <div class="form-container" id="contact-section">
-            <h3 class="form-label" id="contact-title">Связаться с представителем:</h3>
-            <a href="https://t.me/Olzhar_Akylbayev" target="_blank" class="link-item">
-                📱 @Olzhar_Akylbayev
-            </a>
-            <div class="action-buttons">
-                <button class="btn-secondary" id="contact-back-btn">🏠 На главную</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Тексты для переводов
-        const translations = {
-            ru: {
-                title: "Профсоюз ВКО",
-                subtitle: "Восточно-Казахстанская область",
-                about: "О профсоюзе",
-                legalActs: "Правовые акты",
-                appeal: "Подать обращение", 
-                contact: "Связаться с представителем",
-                anonymityQuestion: "Вы хотите остаться инкогнито?",
-                yes: "Да",
-                no: "Нет",
-                name: "ФИО:",
-                namePlaceholder: "Введите ваше ФИО",
-                job: "Должность / Место работы:",
-                jobPlaceholder: "Введите должность",
-                phone: "Телефон:",
-                phonePlaceholder: "+7 777 123 45 67",
-                topic: "Тема обращения:",
-                topicPlaceholder: "Укажите тему",
-                details: "Подробности:",
-                detailsPlaceholder: "Опишите ситуацию подробно",
-                home: "🏠 На главную",
-                continue: "Продолжить",
-                submit: "Отправить",
-                success: "✅ Обращение принято!",
-                aboutTitle: "Узнайте больше о нашем профсоюзе:",
-                aboutLink: "👉 Открыть информацию",
-                legalActsTitle: "📢 Нормативно-правовые акты:",
-                contactTitle: "Связаться с представителем:",
-                phoneError: "Введите номер в формате: +7 777 123 45 67 или 8 777 123 45 67",
-                fillAllFields: "Пожалуйста, заполните все поля"
-            },
-            kk: {
-                title: "ШҚО Кәсіподағы",
-                subtitle: "Шығыс Қазақстан облысы",
-                about: "Кәсіподақ туралы",
-                legalActs: "Құқықтық актілер",
-                appeal: "Өтініш беру",
-                contact: "Өкілмен байланысу",
-                anonymityQuestion: "Анонимді болуды қалайсыз ба?",
-                yes: "Ия",
-                no: "Жоқ",
-                name: "Аты-жөніңіз:",
-                namePlaceholder: "Аты-жөніңізді енгізіңіз",
-                job: "Қызметіңіз / Жұмыс орныңыз:",
-                jobPlaceholder: "Қызметіңізді енгізіңіз",
-                phone: "Телефон нөміріңіз:",
-                phonePlaceholder: "+7 777 123 45 67",
-                topic: "Өтініш тақырыбы:",
-                topicPlaceholder: "Тақырыпты көрсетіңіз",
-                details: "Толығырақ:",
-                detailsPlaceholder: "Жағдайды толық сипаттаңыз",
-                home: "🏠 Басты бетке",
-                continue: "Жалғастыру",
-                submit: "Жіберу",
-                success: "✅ Өтініш қабылданды!",
-                aboutTitle: "Біздің кәсіподақ туралы толығырақ біліңіз:",
-                aboutLink: "👉 Ақпаратты ашу",
-                legalActsTitle: "📢 Нормативтік құқықтық актілер:",
-                contactTitle: "Өкілге хабарласу:",
-                phoneError: "Нөмірді мына форматта енгізіңіз: +7 777 123 45 67 немесе 8 777 123 45 67",
-                fillAllFields: "Өтінемін, барлық өрістерді толтырыңыз"
-            }
-        };
-
-        // Ссылки на правовые акты
-        const legalLinks = {
-            ru: [
-                { title: "О профессиональных союзах", url: "https://adilet.zan.kz/rus/docs/Z1400000211" },
-                { title: "Трудовой кодекс Республики Казахстан", url: "https://adilet.zan.kz/rus/docs/K1500000414" },
-                { title: "О системе оплаты труда работников за счёт бюджета", url: "https://adilet.zan.kz/rus/docs/P1500001193" },
-                { title: "Об утверждении перечня вредных работ и порядка предоставления льгот", url: "https://adilet.zan.kz/rus/docs/V1500012731" },
-                { title: "Отраслевое соглашение в сфере здравоохранения на 2023–2025 годы", url: "https://adilet.zan.kz/rus/docs/D23RR0000_1" },
-                { title: "Областное трёхстороннее соглашение ВКО на 2024–2026 годы", url: "https://www.gov.kz/memleket/entities/vko-enbek/documents/details/672994?lang=ru&ysclid=mcjb2n8kw5835551969" }
-            ],
-            kk: [
-                { title: "Кәсiптiк одақтар туралы", url: "https://adilet.zan.kz/kaz/docs/Z1400000211" },
-                { title: "Қазақстан Республикасының Еңбек Кодексі", url: "https://adilet.zan.kz/kaz/docs/K1500000414" },
-                { title: "Бюджет қаражаты есебінен қамтылатын қызметкерлердің еңбекақы жүйесі туралы", url: "https://adilet.zan.kz/kaz/docs/P1500001193" },
-                { title: "Зиянды жұмыстар тізбесін және жеңілдіктер беру тәртібін бекіту туралы", url: "https://adilet.zan.kz/kaz/docs/V1500012731" },
-                { title: "2023–2025 жылдарға арналған денсаулық сақтау саласындағы салалық келісім", url: "https://adilet.zan.kz/kaz/docs/D23RR0000_1" },
-                { title: "2024–2026 жылдарға арналған ШҚО үшжақты облыстық келісімі", url: "https://www.gov.kz/memleket/entities/vko-enbek/documents/details/672994?lang=ru&ysclid=mcjb2n8kw5835551969" }
-            ]
-        };
-
-        // Состояние приложения
-        let currentLang = 'ru';
-        let currentStep = 'language';
-        let appealData = {
-            isAnonymous: null,
-            name: '',
-            job: '',
-            phone: '',
-            topic: '',
-            details: ''
-        };
-
-        // Элементы DOM
-        const elements = {
-            langSelector: document.getElementById('language-selector'),
-            mainMenu: document.getElementById('main-menu'),
-            appealForm: document.getElementById('appeal-form'),
-            aboutSection: document.getElementById('about-section'),
-            legalActsSection: document.getElementById('legal-acts-section'),
-            contactSection: document.getElementById('contact-section'),
-            
-            // Шаги формы обращения
-            anonymityStep: document.getElementById('anonymity-step'),
-            personalData: document.getElementById('personal-data'),
-            appealDetails: document.getElementById('appeal-details'),
-            
-            // Кнопки
-            continueBtn: document.getElementById('continue-btn'),
-            backBtn: document.getElementById('back-btn')
-        };
-
-        // Инициализация
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeApp();
-            setupEventListeners();
-        });
-
-        function initializeApp() {
-            updateLanguage();
-            showSection('language');
-        }
-
-        function setupEventListeners() {
-            // Выбор языка
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active');
-                    currentLang = e.target.dataset.lang;
-                    updateLanguage();
-                    setTimeout(() => showSection('main'), 500);
-                });
-            });
-
-            // Главное меню
-            document.getElementById('about-btn').addEventListener('click', () => showSection('about'));
-            document.getElementById('legal-acts-btn').addEventListener('click', () => showSection('legal-acts'));
-            document.getElementById('appeal-btn').addEventListener('click', () => {
-                resetAppealForm();
-                showSection('appeal');
-            });
-            document.getElementById('contact-btn').addEventListener('click', () => showSection('contact'));
-
-            // Кнопки "На главную"
-            document.querySelectorAll('[id$="-back-btn"]').forEach(btn => {
-                btn.addEventListener('click', () => showSection('main'));
-            });
-            document.getElementById('back-btn').addEventListener('click', () => showSection('main'));
-
-            // Выбор анонимности
-            document.querySelectorAll('.anonymity-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    document.querySelectorAll('.anonymity-btn').forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active');
-                    appealData.isAnonymous = e.target.dataset.anonym === 'true';
-                    
-                    // Показать соответствующие поля
-                    if (appealData.isAnonymous) {
-                        elements.personalData.classList.add('hidden');
-                        elements.appealDetails.classList.remove('hidden');
-                        document.getElementById('continue-btn').textContent = translations[currentLang].submit;
-                    } else {
-                        elements.personalData.classList.remove('hidden');
-                        elements.appealDetails.classList.add('hidden');
-                        document.getElementById('continue-btn').textContent = translations[currentLang].continue;
-                    }
-                });
-            });
-
-            // Кнопка "Продолжить"
-            elements.continueBtn.addEventListener('click', handleContinue);
-
-            // Валидация телефона
-            document.getElementById('phone-input').addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
+let currentLanguage = 'ru';
+	    let isAnonymous = null;
+
+	    function showView(id) {
+	        document.querySelectorAll('.view').forEach(view => {
+	            view.classList.remove('active');
+	        });
+	        document.getElementById(id).classList.add('active');
+	    }
+
+	    function setLanguage(lang) {
+	        currentLanguage = lang;
+	        updateTexts(lang);
+	        showView('main-menu-view');
+	    }
+
+	    function updateTexts(lang) {
+	        const t = TEXTS[lang];
+	        document.getElementById('main-menu-title').textContent = t.mainMenuTitle;
+	        document.getElementById('about-text').textContent = t.aboutText;
+	        document.getElementById('docs-text').textContent = t.docsText;
+	        document.getElementById('appeal-text').textContent = t.appealText;
+	        document.getElementById('contact-text').textContent = t.contactText;
+	        document.getElementById('about-title').textContent = t.aboutTitle;
+	        document.getElementById('about-description').textContent = t.aboutDescription;
+	        document.getElementById('docs-title').textContent = t.docsTitle;
+	        document.getElementById('anonymity-title').textContent = t.anonymityTitle;
+	        document.getElementById('anonymity-question').textContent = t.anonymityQuestion;
+	        document.getElementById('anonym-yes').textContent = t.anonymYes;
+	        document.getElementById('anonym-no').textContent = t.anonymNo;
+	        document.getElementById('appeal-form-title').textContent = t.appealFormTitle;
+	        document.getElementById('name-label').textContent = t.nameLabel;
+	        document.getElementById('job-label').textContent = t.jobLabel;
+	        document.getElementById('phone-label').textContent = t.phoneLabel;
+	        document.getElementById('phone-error').textContent = t.phoneError;
+	        document.getElementById('topic-label').textContent = t.topicLabel;
+	        document.getElementById('details-label').textContent = t.detailsLabel;
+	        document.getElementById('submit-appeal').textContent = t.submitAppeal;
+	        document.getElementById('success-title').textContent = t.successTitle;
+	        document.getElementById('success-message').textContent = t.successMessage;
+	        document.getElementById('back-to-main').textContent = t.backToMain;
+	        document.getElementById('contact-title').textContent = t.contactTitle;
+	        document.getElementById('contact-description').textContent = t.contactDescription;
+
+	        renderDocuments();
+	    }
+
+	    function selectAnonymity(choice) {
+	        isAnonymous = choice;
+	        if (choice) {
+	            document.getElementById('personal-fields').style.display = 'none';
+	        } else {
+	            document.getElementById('personal-fields').style.display = 'block';
+	        }
+	        showView('appeal-form-view');
+	    }
+
+	    function showAbout() {
+	        showView('about-view');
+	    }
+
+	    function showDocuments() {
+	        renderDocuments();
+	        showView('documents-view');
+	    }
+
+	    function renderDocuments() {
+	        const container = document.getElementById('documents-container');
+	        container.innerHTML = '';
+	        DOCUMENTS[currentLanguage].forEach(doc => {
+	            const div = document.createElement('div');
+	            div.className = 'document-card';
+	            div.innerHTML = `
+	                <h3>${doc.title}</h3>
+	                <a href="${doc.url}" target="_blank">Открыть</a>
+	            `;
+	            container.appendChild(div);
+	        });
+	    }
+
+	    function showAppeal() {
+	        showView('anonymity-view');
+	    }
+
+	    function showContact() {
+	        showView('contact-view');
+	    }
+
+	    // Валидация телефона
+	    document.getElementById('phone').addEventListener('input', function () {
+	        const value = this.value;
+	        const error = document.getElementById('phone-error');
+	        const pattern = /^(\+7|8)\s?\d{3}\s?\d{3}\s?\d{2}\s?\d{2}$/;
+	        if (!pattern.test(value)) {
+	            error.style.display = 'block';
+	        } else {
+	            error.style.display = 'none';
+	        }
+	    });
+
+	    // Отправка формы
+	    document.getElementById('appeal-form').addEventListener('submit', function (e) {
+	        e.preventDefault();
+
+	        // Здесь можно вставить отправку данных через fetch или в Telegram-бота
+	        // const formData = new FormData(this);
+
+	        // Пример показа уведомления
+	        document.getElementById('notification').classList.add('show');
+	        setTimeout(() => {
+	            document.getElementById('notification').classList.remove('show');
+	        }, 3000);
+
+	        this.reset();
+	        showView('success-view');
+	    });
+	</script>
+	</body>
+	</html>
+        
